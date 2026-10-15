@@ -3,7 +3,7 @@
 set -euo pipefail
 BASE="${1:-http://localhost:8000}"
 HDR=(); [ -n "${HOST_HEADER:-}" ] && HDR=(-H "Host: ${HOST_HEADER}")   # e.g. HOST_HEADER=stockpilot.local on minikube
-post() { curl -sS -o /dev/null "${HDR[@]}" -w "  %{http_code}  $2\n" -X POST "$BASE/api/products" -H 'Content-Type: application/json' -d "$1"; }
+post() { curl -sS -o /dev/null ${HDR[@]+"${HDR[@]}"} -w "  %{http_code}  $2\n" -X POST "$BASE/api/products" -H 'Content-Type: application/json' -d "$1"; }
 echo "Seeding products at $BASE ..."
 post '{"sku":"LAP-001","name":"Dell Latitude 5540","category":"Laptops","description":"14-inch business laptop","quantity":18,"reorder_level":5,"unit_price":68999}' "Dell Latitude 5540"
 post '{"sku":"LAP-002","name":"MacBook Air M3","category":"Laptops","description":"13-inch, 16 GB RAM","quantity":4,"reorder_level":5,"unit_price":114900}' "MacBook Air M3"
@@ -14,7 +14,7 @@ post '{"sku":"DOCK-001","name":"Dell WD19S Dock","category":"Accessories","descr
 post '{"sku":"HS-001","name":"Jabra Evolve2 65","category":"Audio","description":"Wireless headset","quantity":9,"reorder_level":10,"unit_price":21999}' "Jabra Evolve2 65"
 post '{"sku":"CAB-001","name":"USB-C to HDMI cable 2m","category":"Cables","description":"","quantity":60,"reorder_level":20,"unit_price":799}' "USB-C to HDMI cable"
 echo "Recording a few stock movements ..."
-curl -sS -o /dev/null "${HDR[@]}" -X POST "$BASE/api/products/1/movements" -H 'Content-Type: application/json' -d '{"movement_type":"OUT","quantity":3,"note":"Issued to new joiners"}'
-curl -sS -o /dev/null "${HDR[@]}" -X POST "$BASE/api/products/2/movements" -H 'Content-Type: application/json' -d '{"movement_type":"IN","quantity":6,"note":"Supplier delivery PO-1182"}'
-curl -sS -o /dev/null "${HDR[@]}" -X POST "$BASE/api/products/5/movements" -H 'Content-Type: application/json' -d '{"movement_type":"OUT","quantity":5,"note":"Customer order #1024"}'
-echo "Done."; curl -sS "${HDR[@]}" "$BASE/api/products/stats"; echo
+curl -sS -o /dev/null ${HDR[@]+"${HDR[@]}"} -X POST "$BASE/api/products/1/movements" -H 'Content-Type: application/json' -d '{"movement_type":"OUT","quantity":3,"note":"Issued to new joiners"}'
+curl -sS -o /dev/null ${HDR[@]+"${HDR[@]}"} -X POST "$BASE/api/products/2/movements" -H 'Content-Type: application/json' -d '{"movement_type":"IN","quantity":6,"note":"Supplier delivery PO-1182"}'
+curl -sS -o /dev/null ${HDR[@]+"${HDR[@]}"} -X POST "$BASE/api/products/5/movements" -H 'Content-Type: application/json' -d '{"movement_type":"OUT","quantity":5,"note":"Customer order #1024"}'
+echo "Done."; curl -sS ${HDR[@]+"${HDR[@]}"} "$BASE/api/products/stats"; echo

@@ -7,7 +7,7 @@ TARGET="${1:-eks}"
 ARGOCD_VERSION="${ARGOCD_VERSION:-stable}"
 
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -n argocd -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
+kubectl apply -n argocd --server-side --force-conflicts -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"   # server-side: the ApplicationSet CRD exceeds the client-side annotation limit
 kubectl -n argocd rollout status deploy/argocd-server --timeout=300s
 
 if [ "$TARGET" = "minikube" ]; then

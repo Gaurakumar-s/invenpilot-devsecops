@@ -9,10 +9,10 @@ HDR=()
 [ -n "${HOST_HEADER:-}" ] && HDR=(-H "Host: ${HOST_HEADER}")
 echo "Sending $N rounds of requests to $BASE ${HOST_HEADER:+(Host: $HOST_HEADER)} ..."
 for i in $(seq 1 "$N"); do
-  curl -s -o /dev/null "${HDR[@]}" "$BASE/api/products" &
-  curl -s -o /dev/null "${HDR[@]}" "$BASE/api/products/stats" &
-  curl -s -o /dev/null "${HDR[@]}" "$BASE/api/movements?limit=5" &
-  curl -s -o /dev/null "${HDR[@]}" "$BASE/api/products/99999" &   # 404s show up in the status-code panel
+  curl -s -o /dev/null ${HDR[@]+"${HDR[@]}"} "$BASE/api/products" &
+  curl -s -o /dev/null ${HDR[@]+"${HDR[@]}"} "$BASE/api/products/stats" &
+  curl -s -o /dev/null ${HDR[@]+"${HDR[@]}"} "$BASE/api/movements?limit=5" &
+  curl -s -o /dev/null ${HDR[@]+"${HDR[@]}"} "$BASE/api/products/99999" &   # 404s show up in the status-code panel
   if (( i % 25 == 0 )); then wait; echo "  $i / $N"; fi
 done
 wait
