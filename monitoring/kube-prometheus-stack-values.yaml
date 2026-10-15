@@ -28,6 +28,12 @@ grafana:
       searchNamespace: ALL
       folder: /tmp/dashboards
   defaultDashboardsEnabled: true
+  # Demo convenience: anyone reaching the Grafana UI can VIEW dashboards without logging in.
+  # Remove this block for anything beyond the capstone demo.
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
 
 alertmanager:
   enabled: false
