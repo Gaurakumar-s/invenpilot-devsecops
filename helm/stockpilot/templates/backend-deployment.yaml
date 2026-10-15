@@ -34,7 +34,15 @@ spec:
         # Wait for PostgreSQL before running Alembic migrations (avoids crash-loop restarts)
         - name: wait-for-postgres
           image: busybox:1.36
-          command: ["sh", "-c", "until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done"]
+          command:
+            - sh
+            - -c
+            - |
+              # PostgreSQL opens the port briefly during initdb, so require two consecutive successes.
+              until nc -z postgres 5432; do echo "waiting for postgres"; sleep 2; done
+              sleep 5
+              until nc -z postgres 5432; do echo "waiting for postgres (restart during init)"; sleep 2; done
+              echo "postgres is accepting connections"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
