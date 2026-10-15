@@ -4,12 +4,12 @@ Provisions the production-style infrastructure for StockPilot:
 
 | Resource | Details |
 |---|---|
-| VPC | `10.20.0.0/16`, 2 AZs (`ap-south-1a`, `ap-south-1b`) |
+| VPC | `10.20.0.0/16`, 2 AZs (`ap-southeast-2a`, `ap-southeast-2b`) |
 | Public subnets ×2 | ingress-nginx LoadBalancer (tagged `kubernetes.io/role/elb`) |
 | Private subnets ×2 | EKS worker nodes, egress via a single NAT gateway |
-| EKS | Kubernetes `1.34`, public API endpoint, creator gets admin |
-| Managed node group | `t3.medium` × 2 (min 2 / max 3), Amazon Linux 2023 |
-| Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (IRSA) so PVCs bind |
+| EKS | Kubernetes `1.36`, public API endpoint, creator gets admin |
+| Managed node group | `t3.medium` × 2 (min 2 / max 2, account vCPU quota = 5), Amazon Linux 2023 |
+| Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (EBS policy on the node role; the org policy blocks OIDC/IRSA) so PVCs bind |
 
 ## Usage
 
@@ -21,7 +21,7 @@ terraform fmt -check -recursive
 terraform validate
 terraform plan -out tfplan
 terraform apply tfplan                           # ~15 minutes
-aws eks update-kubeconfig --region ap-south-1 --name stockpilot-eks
+aws eks update-kubeconfig --region ap-southeast-2 --name stockpilot-eks
 kubectl get nodes
 ```
 

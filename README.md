@@ -250,13 +250,13 @@ Directory: [`terraform/`](terraform/) (see its README for details).
 
 | Resource | Configuration |
 |---|---|
-| Region | `ap-south-1` |
+| Region | `ap-southeast-2` (Sydney; the only region permitted by the account's organization policy) |
 | VPC | `10.20.0.0/16`, DNS hostnames enabled |
 | Public subnets | `10.20.101.0/24`, `10.20.102.0/24` (AZ a/b) — tagged `kubernetes.io/role/elb` for the ingress load balancer |
 | Private subnets | `10.20.1.0/24`, `10.20.2.0/24` — EKS worker nodes, egress through one NAT gateway |
-| EKS | `stockpilot-eks`, Kubernetes 1.34, public API endpoint, cluster creator = admin |
-| Node group | managed, `t3.medium` × 2 (min 2 / max 3), Amazon Linux 2023 |
-| Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** with an IRSA role so PVCs bind |
+| EKS | `stockpilot-eks`, Kubernetes 1.36, public API endpoint, cluster creator = admin |
+| Node group | managed, `t3.medium` × 2 (min 2 / max 2, account vCPU quota = 5), Amazon Linux 2023 |
+| Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (EBS policy attached to the node role, because the account's organization policy blocks IAM OIDC providers) so PVCs bind |
 
 ```bash
 cd terraform
@@ -265,7 +265,7 @@ terraform init
 terraform validate
 terraform plan -out tfplan
 terraform apply tfplan                           # ≈ 15 min
-aws eks update-kubeconfig --region ap-south-1 --name stockpilot-eks
+aws eks update-kubeconfig --region ap-southeast-2 --name stockpilot-eks
 ```
 
 Tear-down (mandatory after the demo, ≈ $0.25/hour while running):

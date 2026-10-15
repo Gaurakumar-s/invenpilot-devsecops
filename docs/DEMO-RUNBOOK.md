@@ -7,7 +7,7 @@ the EKS cluster exists; **destroy it at the end (step 9)**.
 
 ```bash
 # AWS CLI is installed; configure an IAM user that has AdministratorAccess
-aws configure            # Access key, secret, region: ap-south-1, output: json
+aws configure            # Access key, secret, region: ap-southeast-2, output: json
 aws sts get-caller-identity   # must print your account id
 
 # Make the two GHCR packages PUBLIC so the cluster can pull them without a secret:
@@ -28,7 +28,7 @@ terraform plan -out tfplan            # screenshot 12-terraform-plan.png
 terraform apply tfplan                # screenshot 12b-terraform-apply.png when it finishes
 ```
 
-AWS Console screenshots (region **ap-south-1**):
+AWS Console screenshots (region **ap-southeast-2**, the only region your AWS organization allows):
 * VPC → Your VPCs → `stockpilot-vpc` and Subnets (2 public + 2 private) → `13-aws-vpc.png`
 * EKS → Clusters → `stockpilot-eks` → Compute tab (node group) → `14-aws-eks.png`
 

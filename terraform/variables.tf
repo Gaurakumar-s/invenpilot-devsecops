@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region for all resources"
   type        = string
-  default     = "ap-south-1"
+  default     = "ap-southeast-2"
 }
 
 variable "project" {
@@ -25,7 +25,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability zones (two required for EKS)"
   type        = list(string)
-  default     = ["ap-south-1a", "ap-south-1b"]
+  default     = ["ap-southeast-2a", "ap-southeast-2b"]
 }
 
 variable "public_subnets" {
@@ -49,7 +49,7 @@ variable "cluster_name" {
 variable "cluster_version" {
   description = "Kubernetes version for EKS (keep inside AWS standard support to avoid extended-support fees)"
   type        = string
-  default     = "1.34"
+  default     = "1.36"
 }
 
 variable "node_instance_types" {
@@ -65,7 +65,7 @@ variable "node_min_size" {
 
 variable "node_max_size" {
   type    = number
-  default = 3
+  default = 2 # account vCPU quota is 5; 2 x t3.medium = 4 vCPUs
 }
 
 variable "node_desired_size" {

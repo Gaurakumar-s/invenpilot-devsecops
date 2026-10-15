@@ -15,14 +15,21 @@ module "eks" {
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
 
+  # Keep the demo cluster lean: no KMS envelope encryption key, no control-plane log group
+  create_kms_key              = false
+  cluster_encryption_config   = {}
+  create_cloudwatch_log_group = false
+  cluster_enabled_log_types   = []
+
+  # The account's organization policy blocks IAM OIDC providers, so IRSA is disabled and
+  # the EBS CSI driver gets its permissions from the node IAM role instead.
+  enable_irsa = false
+
   cluster_addons = {
-    coredns    = { most_recent = true }
-    kube-proxy = { most_recent = true }
-    vpc-cni    = { most_recent = true }
-    aws-ebs-csi-driver = {
-      most_recent              = true
-      service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
-    }
+    coredns            = { most_recent = true }
+    kube-proxy         = { most_recent = true }
+    vpc-cni            = { most_recent = true }
+    aws-ebs-csi-driver = { most_recent = true }
   }
 
   eks_managed_node_groups = {
@@ -37,22 +44,10 @@ module "eks" {
       labels = {
         role = "worker"
       }
-    }
-  }
-}
-
-# IAM role for the EBS CSI driver (IRSA) so PersistentVolumeClaims can bind
-module "ebs_csi_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.48"
-
-  role_name             = "${var.cluster_name}-ebs-csi"
-  attach_ebs_csi_policy = true
-
-  oidc_providers = {
-    main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
+      # Lets the EBS CSI driver (running on these nodes) create/attach volumes for PVCs
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
     }
   }
 }

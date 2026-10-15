@@ -3,7 +3,7 @@
 # kubeconfig -> ingress-nginx -> metrics-server -> monitoring -> ArgoCD (deploys the app)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-REGION="${AWS_REGION:-ap-south-1}"
+REGION="${AWS_REGION:-ap-southeast-2}"
 CLUSTER="${CLUSTER_NAME:-stockpilot-eks}"
 
 echo "==> kubeconfig"
