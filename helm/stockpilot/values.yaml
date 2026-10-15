@@ -1,0 +1,58 @@
+# Default values for the StockPilot chart.
+# Image tag is written by the CI pipeline (GitOps): it is always a Git commit SHA.
+image:
+  registry: ghcr.io/gaurakumar-s
+  backend: stockpilot-backend
+  frontend: stockpilot-frontend
+  tag: "CHANGEME"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+backend:
+  replicaCount: 2
+  port: 8000
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 512Mi}
+  env:
+    APP_NAME: "StockPilot API"
+
+frontend:
+  replicaCount: 2
+  port: 8080
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {cpu: 200m, memory: 128Mi}
+
+postgres:
+  enabled: true
+  image: postgres:16-alpine
+  database: stockpilot
+  username: stockpilot
+  # Demo credential only. In production inject via an external secret manager.
+  password: stockpilot
+  storage: 2Gi
+  storageClassName: ""   # "" = cluster default (gp2 on EKS, standard on minikube)
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 512Mi}
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ""               # empty = match any host (use the LoadBalancer DNS name)
+  annotations: {}
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    # must match the kube-prometheus-stack Helm release name
+    releaseLabel: kube-prometheus-stack

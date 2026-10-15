@@ -1,0 +1,5 @@
+# minikube: `minikube addons enable ingress metrics-server`
+ingress:
+  host: stockpilot.local
+postgres:
+  storageClassName: standard

@@ -1,0 +1,12 @@
+StockPilot {{ .Chart.AppVersion }} deployed to namespace {{ .Release.Namespace }}.
+
+  kubectl get pods,svc,ingress,hpa -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.host }}
+Open:  http://{{ .Values.ingress.host }}/   (add the ingress IP to /etc/hosts)
+{{- else }}
+Open:  http://<ingress-nginx LoadBalancer hostname>/
+{{- end }}
+{{- end }}
+Backend image: {{ include "stockpilot.backendImage" . }}

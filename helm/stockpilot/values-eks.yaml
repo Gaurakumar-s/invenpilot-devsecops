@@ -1,0 +1,5 @@
+# AWS EKS: ingress-nginx exposes an ELB; leave host empty to accept the ELB DNS name.
+ingress:
+  host: ""
+postgres:
+  storageClassName: gp2
