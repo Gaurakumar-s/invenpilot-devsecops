@@ -4,7 +4,7 @@
 #   ./argocd/install.sh minikube
 set -euo pipefail
 TARGET="${1:-eks}"
-ARGOCD_VERSION="${ARGOCD_VERSION:-v2.13.3}"
+ARGOCD_VERSION="${ARGOCD_VERSION:-stable}"
 
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -n argocd -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
