@@ -1,0 +1,29 @@
+# ArgoCD Application: GitOps deployment of the StockPilot Helm chart (minikube).
+# CI writes the new image SHA into helm/stockpilot/values.yaml; ArgoCD syncs it.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stockpilot
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Gaurakumar-s/stockpilot-devsecops.git
+    targetRevision: main
+    path: helm/stockpilot
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-minikube.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stockpilot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
