@@ -1,5 +1,9 @@
 # Demo runbook — AWS day + video recording
 
+> **Status 15 Oct 2026:** steps 0–4 and 8 were executed; the EKS cluster is **running** so the video can be
+> recorded. After recording, run step 9 (destroy). The ArgoCD admin password is printed by
+> `kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d`.
+
 Everything below is copy-paste. Budget: ~2 hours including the recording. Cost ≈ $0.35/hour while
 the EKS cluster exists. Region is **ap-southeast-2 (Sydney)**: the account's organization policy allows no other region; **destroy it at the end (step 9)**.
 
