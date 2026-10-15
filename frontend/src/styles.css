@@ -74,11 +74,13 @@ header { display: flex; justify-content: space-between; align-items: flex-start;
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .9rem; }
 th { text-align: left; font-size: .72rem; letter-spacing: .08em; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--border); }
-td { padding: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; white-space: nowrap; }
+td { padding: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+td:not(:first-child) { white-space: nowrap; }
 tr:hover td { background: #f8fafc; }
 .product-cell { display: flex; align-items: center; gap: 10px; }
 .product-cell b { display: block; }
-.product-cell small { display: block; max-width: 280px; overflow: hidden; text-overflow: ellipsis; }
+.product-cell small { display: block; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.product-cell { min-width: 180px; }
 .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 .dot.ok { background: var(--green); } .dot.low { background: var(--amber); } .dot.out { background: var(--red); }
 .chip { background: #f1f5f9; border-radius: 999px; padding: 4px 10px; font-size: .78rem; }
@@ -87,7 +89,7 @@ tr:hover td { background: #f8fafc; }
 .status.ok { background: #dcfce7; color: #166534; }
 .status.low { background: #fef3c7; color: #92400e; }
 .status.out { background: #fee2e2; color: #991b1b; }
-.actions { text-align: right; }
+.actions { text-align: right; white-space: nowrap; }
 .icon-btn { border: 1px solid var(--border); background: #fff; border-radius: 8px; width: 32px; height: 32px; cursor: pointer; margin-left: 4px; }
 .icon-btn:hover { background: #f1f5f9; }
 .icon-btn.danger:hover { background: #fee2e2; border-color: #fecaca; }
