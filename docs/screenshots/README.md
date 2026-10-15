@@ -12,5 +12,5 @@
 | M7 Terraform | `12-terraform-plan.png`, `12b-terraform-apply.png`, `13-aws-vpc.png`, `14-aws-eks.png`, `15-terraform-destroy.png` | *(captured on AWS day — see docs/DEMO-RUNBOOK.md)* |
 | M8 Kubernetes | `16-kubectl-get-pods-minikube.png`, `17-kubectl-get-svc-ingress-minikube.png`, `18-helm-list-minikube.png`, `19-app-via-ingress-minikube.png` | 2+2 replicas Running, ClusterIP services, Ingress routes, app via Ingress (minikube rehearsal; EKS versions added on AWS day) |
 | M8 HPA | `24-kubectl-get-hpa-minikube.png` | HPA on backend CPU |
-| ArgoCD | `23-argocd-synced.png`, `23b-argocd-app-cli.png` | Application Synced / Healthy, automated sync + prune + selfHeal |
+| ArgoCD | `23-argocd-synced.png`, `23b-argocd-app-cli.png`, `23c-argocd-ui.png` | `argocd app get` + kubectl: Synced / Healthy, automated sync + prune + selfHeal (minikube); `23c` = ArgoCD web UI captured on AWS day |
 | M9 Observability | `20-curl-metrics.png`, `21-prometheus-targets-up.png`, `22-grafana-dashboard.png` | `/metrics` output, Prometheus target UP (2/2), Grafana panels with live traffic |
