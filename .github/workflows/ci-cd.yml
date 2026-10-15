@@ -1,0 +1,188 @@
+name: StockPilot CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "22"
+
+jobs:
+  # ------------------------------------------------------------
+  # 1. Backend quality gate: lint + pytest (fails the pipeline on red)
+  # ------------------------------------------------------------
+  backend-test:
+    name: Backend · ruff + pytest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Run unit tests (pytest)
+        run: pytest -v
+
+  # ------------------------------------------------------------
+  # 2. Frontend build (Vite)
+  # ------------------------------------------------------------
+  frontend-build:
+    name: Frontend · npm build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+
+  # ------------------------------------------------------------
+  # 3. Build images -> Trivy scan (HIGH/CRITICAL fail) -> push to GHCR
+  #    Images are tagged with the full Git commit SHA (no "latest").
+  # ------------------------------------------------------------
+  build-scan-push:
+    name: Docker · build, Trivy scan, push to GHCR
+    needs: [backend-test, frontend-build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute image names (GHCR requires lowercase)
+        id: meta
+        run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "backend_image=ghcr.io/${OWNER}/stockpilot-backend" >> "$GITHUB_OUTPUT"
+          echo "frontend_image=ghcr.io/${OWNER}/stockpilot-frontend" >> "$GITHUB_OUTPUT"
+          echo "tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          load: true
+          push: false
+          tags: ${{ steps.meta.outputs.backend_image }}:${{ steps.meta.outputs.tag }}
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          load: true
+          push: false
+          tags: ${{ steps.meta.outputs.frontend_image }}:${{ steps.meta.outputs.tag }}
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+
+      # ---- DevSecOps gate: Trivy container scanning ----
+      - name: Trivy scan · backend image (fail on HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ steps.meta.outputs.backend_image }}:${{ steps.meta.outputs.tag }}
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Trivy scan · frontend image (fail on HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ steps.meta.outputs.frontend_image }}:${{ steps.meta.outputs.tag }}
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      # ---- Only scanned images are promoted to the registry ----
+      - name: Push images to GHCR (SHA tag only)
+        if: github.event_name != 'pull_request'
+        run: |
+          docker push ${{ steps.meta.outputs.backend_image }}:${{ steps.meta.outputs.tag }}
+          docker push ${{ steps.meta.outputs.frontend_image }}:${{ steps.meta.outputs.tag }}
+
+  # ------------------------------------------------------------
+  # 4. GitOps: write the new SHA into the Helm values file.
+  #    ArgoCD watches helm/stockpilot and rolls the deployment out.
+  # ------------------------------------------------------------
+  update-gitops:
+    name: GitOps · bump Helm image tag
+    needs: build-scan-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set image tag in helm/stockpilot/values.yaml
+        run: |
+          TAG="${{ needs.build-scan-push.outputs.image_tag }}"
+          sed -i -E "s|^(  tag: ).*|\1\"${TAG}\"|" helm/stockpilot/values.yaml
+          grep -n "tag:" helm/stockpilot/values.yaml
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add helm/stockpilot/values.yaml
+          if git diff --cached --quiet; then
+            echo "Image tag unchanged; nothing to commit."
+          else
+            git commit -m "chore(gitops): deploy image ${GITHUB_SHA::7} via ArgoCD [skip ci]"
+            git push origin HEAD:main
+          fi
