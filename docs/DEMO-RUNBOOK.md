@@ -14,6 +14,8 @@ aws sts get-caller-identity   # must print your account id
 #   https://github.com/users/Gaurakumar-s/packages/container/stockpilot-backend/settings
 #   https://github.com/users/Gaurakumar-s/packages/container/stockpilot-frontend/settings
 #   -> "Change visibility" -> Public
+#   then screenshot https://github.com/Gaurakumar-s/stockpilot-devsecops/pkgs/container/stockpilot-backend
+#   (shows the SHA tags) -> docs/screenshots/10-ghcr-packages-sha.png
 ```
 
 ## 1. Terraform — create VPC + EKS (≈ 15 min)

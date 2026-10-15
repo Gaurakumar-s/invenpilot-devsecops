@@ -344,6 +344,7 @@ open http://stockpilot.local
 kubectl port-forward svc/kube-prometheus-stack-prometheus -n monitoring 9090:9090   # http://localhost:9090/targets
 kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80      # http://localhost:3001  admin / stockpilot-admin
 ./scripts/load-test.sh http://<ingress-host> 600                                     # populate the panels
+# minikube: HOST_HEADER=stockpilot.local ./scripts/load-test.sh http://127.0.0.1:8081
 ```
 
 ---
@@ -354,6 +355,8 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
   security, Terraform, Kubernetes/Helm/ArgoCD, observability, learnings).
 * `demo/presentation.mp4` — recorded walkthrough (slides → codebase → CI run → GHCR → Terraform +
   AWS console → ArgoCD → kubectl → app via Ingress → Prometheus targets → Grafana).
+* [`docs/DEMO-RUNBOOK.md`](docs/DEMO-RUNBOOK.md) — the exact command sequence for the AWS day and the
+  recording (prerequisites, Terraform, bootstrap, ArgoCD, monitoring, video, destroy).
 * `docs/screenshots/` — evidence per module (app, pytest, compose, Actions, GHCR, Trivy, Terraform
   plan/apply/destroy, AWS console, kubectl, helm, ArgoCD, Prometheus, Grafana).
 
