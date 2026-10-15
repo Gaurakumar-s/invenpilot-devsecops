@@ -4,7 +4,7 @@ image:
   registry: ghcr.io/gaurakumar-s
   backend: stockpilot-backend
   frontend: stockpilot-frontend
-  tag: "CHANGEME"
+  tag: "12a5d672ec37e3a7fe6d8fb49c8603b99e7e318b"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
