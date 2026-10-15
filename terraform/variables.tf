@@ -53,9 +53,9 @@ variable "cluster_version" {
 }
 
 variable "node_instance_types" {
-  description = "EC2 instance types for the managed node group"
+  description = "EC2 instance types for the managed node group (must be free-tier eligible on the AWS free plan)"
   type        = list(string)
-  default     = ["t3.medium"]
+  default     = ["m7i-flex.large"]
 }
 
 variable "node_min_size" {

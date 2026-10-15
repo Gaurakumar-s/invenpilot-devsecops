@@ -8,7 +8,7 @@ Provisions the production-style infrastructure for StockPilot:
 | Public subnets ×2 | ingress-nginx LoadBalancer (tagged `kubernetes.io/role/elb`) |
 | Private subnets ×2 | EKS worker nodes, egress via a single NAT gateway |
 | EKS | Kubernetes `1.36`, public API endpoint, creator gets admin |
-| Managed node group | `t3.medium` × 2 (min 2 / max 2, account vCPU quota = 5), Amazon Linux 2023 |
+| Managed node group | `m7i-flex.large` × 2 (free-tier-eligible, 2 vCPU / 8 GiB; min 2 / max 2 because the vCPU quota is 5), Amazon Linux 2023 |
 | Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (EBS policy on the node role; the org policy blocks OIDC/IRSA) so PVCs bind |
 
 ## Usage
@@ -31,7 +31,7 @@ kubectl get nodes
 terraform destroy -auto-approve
 ```
 
-> Cost ≈ $0.10/h (EKS control plane) + ~$0.08/h (2 × t3.medium) + ~$0.05/h (NAT) ≈ **$0.25/hour**.
+> Cost ≈ $0.10/h (EKS control plane) + ~$0.20/h (2 × m7i-flex.large) + ~$0.05/h (NAT) ≈ **$0.35/hour** (partly covered by free-plan credits).
 > Delete the ingress-nginx LoadBalancer Service (`helm uninstall ingress-nginx -n ingress-nginx`)
 > **before** `terraform destroy`, otherwise the ELB keeps the VPC from being deleted.
 

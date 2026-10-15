@@ -255,7 +255,7 @@ Directory: [`terraform/`](terraform/) (see its README for details).
 | Public subnets | `10.20.101.0/24`, `10.20.102.0/24` (AZ a/b) — tagged `kubernetes.io/role/elb` for the ingress load balancer |
 | Private subnets | `10.20.1.0/24`, `10.20.2.0/24` — EKS worker nodes, egress through one NAT gateway |
 | EKS | `stockpilot-eks`, Kubernetes 1.36, public API endpoint, cluster creator = admin |
-| Node group | managed, `t3.medium` × 2 (min 2 / max 2, account vCPU quota = 5), Amazon Linux 2023 |
+| Node group | managed, `m7i-flex.large` × 2 (2 vCPU / 8 GiB each; min 2 / max 2 because the account vCPU quota is 5 and the AWS free plan only permits free-tier-eligible types), Amazon Linux 2023 |
 | Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (EBS policy attached to the node role, because the account's organization policy blocks IAM OIDC providers) so PVCs bind |
 
 ```bash

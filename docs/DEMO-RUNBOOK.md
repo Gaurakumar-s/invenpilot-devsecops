@@ -1,6 +1,6 @@
 # Demo runbook — AWS day + video recording
 
-Everything below is copy-paste. Budget: ~2 hours including the recording. Cost ≈ $0.25/hour while
+Everything below is copy-paste. Budget: ~2 hours including the recording. Cost ≈ $0.35/hour while
 the EKS cluster exists. Region is **ap-southeast-2 (Sydney)**: the account's organization policy allows no other region; **destroy it at the end (step 9)**.
 
 ## 0. One-time prerequisites (10 min)
