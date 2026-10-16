@@ -13,6 +13,7 @@ same resources shown in the console.
 | M5 CI/CD | `09-actions-green.png`, `09b-actions-list.png` | Green pipeline: test → build → Trivy → GHCR push → GitOps bump |
 | M5 GHCR | `10-ghcr-packages-sha.png` | Package page with SHA tags |
 | M6 Trivy | `11-trivy-local.png`, `11b-trivy-ci.png` | Clean scans locally and in the pipeline (HIGH/CRITICAL gate) |
+| Video | `00-video-thumbnail.png` | Poster frame for the README video link |
 | M7 Terraform | `12-terraform-plan.png`, `12b-terraform-apply.png`, `15-terraform-destroy.png` | plan (53 resources), apply with outputs, destroy |
 | M7 AWS | `13-aws-vpc.png`, `13b-aws-subnets.png`, `14-aws-eks.png` (console) + `13-aws-vpc-cli.png`, `14-aws-eks-cli.png` (CLI) | VPC + 4 subnets + NAT, EKS cluster + node group + EC2 nodes (CLI and console) |
 | M8 Kubernetes | `16-kubectl-get-pods-eks.png`, `17-kubectl-get-svc-ingress-eks.png`, `18-helm-list-eks.png`, `19-app-via-ingress-eks.png` (+ `-minikube` variants) | 2+2 replicas Running, ClusterIP services, Ingress routes `/` and `/api`, Helm release deployed, app via the AWS load balancer |

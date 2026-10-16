@@ -4,13 +4,16 @@
 
 ![StockPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
 
+### Presentation video
+
+[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](demo/presentation.mp4)
+
+*Click the image to open [`demo/presentation.mp4`](demo/presentation.mp4) in GitHub's video player.*
+
 | | |
 |---|---|
-| Presentation video (6 min) | [`demo/presentation.mp4`](demo/presentation.mp4) |
 | Slide deck | [`demo/slides.pdf`](demo/slides.pdf) · [`demo/slides.pptx`](demo/slides.pptx) |
 | Every rubric item and its screenshot | [`docs/screenshots/README.md`](docs/screenshots/README.md) |
-| AWS day runbook and teardown | [`docs/DEMO-RUNBOOK.md`](docs/DEMO-RUNBOOK.md) |
-| Video script | [`docs/VIDEO-SCRIPT.md`](docs/VIDEO-SCRIPT.md) |
 
 StockPilot is a small but production-shaped **inventory management** application. A warehouse team can
 register products (SKU, category, quantity, reorder level, unit price), record **stock IN / OUT
@@ -351,23 +354,6 @@ kubectl port-forward svc/argocd-server -n argocd 8443:443   # https://localhost:
 `argocd/application.yaml` points at `helm/stockpilot` on `main` with automated sync, prune and
 self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls the Deployments.
 
-### Local rehearsal on minikube
-
-```bash
-./scripts/minikube-bootstrap.sh
-echo "$(minikube ip) stockpilot.local" | sudo tee -a /etc/hosts
-open http://stockpilot.local
-```
-
-![kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running](docs/screenshots/16-kubectl-get-pods-eks.png)
-
-![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
-
-![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
-
-![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
-
-
 ---
 
 ## 10. Observability — Prometheus + Grafana
@@ -388,7 +374,6 @@ open http://stockpilot.local
 kubectl port-forward svc/kube-prometheus-stack-prometheus -n monitoring 9090:9090   # http://localhost:9090/targets
 kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80      # http://localhost:3001  admin / stockpilot-admin
 ./scripts/load-test.sh http://<ingress-host> 600                                     # populate the panels
-# minikube: HOST_HEADER=stockpilot.local ./scripts/load-test.sh http://127.0.0.1:8081
 ```
 
 ![Prometheus targets: both backend pods UP](docs/screenshots/21-prometheus-targets-up-eks.png)
@@ -402,11 +387,8 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
 
 * `demo/slides.pptx` / `demo/slides.pdf` — presentation deck (overview, stack, architecture, CI/CD,
   security, Terraform, Kubernetes/Helm/ArgoCD, observability, learnings).
-* `demo/presentation.mp4` — recorded walkthrough (slides → codebase → CI run → GHCR → Terraform +
+* `demo/presentation.mp4` — recorded walkthrough (slides → codebase → CI run → GHCR → Trivy → Terraform +
   AWS console → ArgoCD → kubectl → app via Ingress → Prometheus targets → Grafana).
-* [`docs/VIDEO-SCRIPT.md`](docs/VIDEO-SCRIPT.md) — what to show and say in the recording, part by part.
-* [`docs/DEMO-RUNBOOK.md`](docs/DEMO-RUNBOOK.md) — the exact command sequence for the AWS day and the
-  recording (prerequisites, Terraform, bootstrap, ArgoCD, monitoring, video, destroy).
 * `docs/screenshots/` — evidence per module (app, pytest, compose, Actions, GHCR, Trivy, Terraform
   plan/apply/destroy, AWS console, kubectl, helm, ArgoCD, Prometheus, Grafana).
 
