@@ -42,3 +42,6 @@ terraform.tfvars
 
 # Local plan notes
 PLAN.md
+
+# Local Claude Code settings
+.claude/

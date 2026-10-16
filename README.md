@@ -356,6 +356,16 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
 
 ---
 
+![kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running](docs/screenshots/16-kubectl-get-pods-eks.png)
+
+![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
+
+![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
+
+![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
+
+---
+
 ## 10. Observability — Prometheus + Grafana
 
 * The backend exposes Prometheus metrics at `/metrics` via `prometheus-fastapi-instrumentator`
