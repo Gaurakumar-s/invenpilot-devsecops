@@ -355,6 +355,7 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
   security, Terraform, Kubernetes/Helm/ArgoCD, observability, learnings).
 * `demo/presentation.mp4` — recorded walkthrough (slides → codebase → CI run → GHCR → Terraform +
   AWS console → ArgoCD → kubectl → app via Ingress → Prometheus targets → Grafana).
+* [`docs/VIDEO-SCRIPT.md`](docs/VIDEO-SCRIPT.md) — what to show and say in the recording, part by part.
 * [`docs/DEMO-RUNBOOK.md`](docs/DEMO-RUNBOOK.md) — the exact command sequence for the AWS day and the
   recording (prerequisites, Terraform, bootstrap, ArgoCD, monitoring, video, destroy).
 * `docs/screenshots/` — evidence per module (app, pytest, compose, Actions, GHCR, Trivy, Terraform
