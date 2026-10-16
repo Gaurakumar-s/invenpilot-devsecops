@@ -3,7 +3,7 @@
 | File | Purpose |
 |---|---|
 | `kube-prometheus-stack-values.yaml` | Helm values: Prometheus scrapes every `ServiceMonitor`, Grafana with dashboard sidecar |
-| `grafana-dashboard.json` | StockPilot dashboard: request rate, latency percentiles, error rate, status codes, pod CPU |
+| `grafana-dashboard.json` | InvenPilot dashboard: request rate, latency percentiles, error rate, status codes, pod CPU |
 | `install.sh` | One-shot install + dashboard ConfigMap |
 
 The backend exposes `/metrics` through `prometheus-fastapi-instrumentator`. The Helm chart ships a

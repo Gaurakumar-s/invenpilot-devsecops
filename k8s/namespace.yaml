@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: stockpilot
+  name: invenpilot
   labels:
-    app.kubernetes.io/name: stockpilot
-    app.kubernetes.io/part-of: stockpilot
+    app.kubernetes.io/name: invenpilot
+    app.kubernetes.io/part-of: invenpilot

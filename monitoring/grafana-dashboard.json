@@ -1,7 +1,7 @@
 {
-  "title": "StockPilot — Application Metrics",
-  "uid": "stockpilot-app",
-  "tags": ["stockpilot", "fastapi"],
+  "title": "InvenPilot — Application Metrics",
+  "uid": "invenpilot-app",
+  "tags": ["invenpilot", "fastapi"],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 1,
@@ -11,35 +11,35 @@
     {
       "id": 1, "type": "stat", "title": "Total HTTP requests",
       "gridPos": {"x": 0, "y": 0, "w": 6, "h": 5},
-      "targets": [{"refId": "A", "expr": "sum(http_requests_total{namespace=\"stockpilot\"})"}],
+      "targets": [{"refId": "A", "expr": "sum(http_requests_total{namespace=\"invenpilot\"})"}],
       "fieldConfig": {"defaults": {"color": {"mode": "fixed", "fixedColor": "blue"}}},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "area"}
     },
     {
       "id": 2, "type": "stat", "title": "Requests / sec",
       "gridPos": {"x": 6, "y": 0, "w": 6, "h": 5},
-      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"stockpilot\"}[2m]))"}],
+      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"invenpilot\"}[2m]))"}],
       "fieldConfig": {"defaults": {"unit": "reqps", "decimals": 2, "color": {"mode": "fixed", "fixedColor": "green"}}},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "area"}
     },
     {
       "id": 3, "type": "stat", "title": "5xx error rate",
       "gridPos": {"x": 12, "y": 0, "w": 6, "h": 5},
-      "targets": [{"refId": "A", "expr": "(sum(rate(http_requests_total{namespace=\"stockpilot\", status=~\"5..\"}[5m])) or vector(0)) / sum(rate(http_requests_total{namespace=\"stockpilot\"}[5m])) * 100"}],
+      "targets": [{"refId": "A", "expr": "(sum(rate(http_requests_total{namespace=\"invenpilot\", status=~\"5..\"}[5m])) or vector(0)) / sum(rate(http_requests_total{namespace=\"invenpilot\"}[5m])) * 100"}],
       "fieldConfig": {"defaults": {"unit": "percent", "decimals": 2, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 5}]}}},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"}
     },
     {
       "id": 4, "type": "stat", "title": "Backend pods running",
       "gridPos": {"x": 18, "y": 0, "w": 6, "h": 5},
-      "targets": [{"refId": "A", "expr": "count(kube_pod_status_phase{namespace=\"stockpilot\", phase=\"Running\", pod=~\"backend-.*\"} == 1)"}],
+      "targets": [{"refId": "A", "expr": "count(kube_pod_status_phase{namespace=\"invenpilot\", phase=\"Running\", pod=~\"backend-.*\"} == 1)"}],
       "fieldConfig": {"defaults": {"color": {"mode": "fixed", "fixedColor": "purple"}}},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"}
     },
     {
       "id": 5, "type": "timeseries", "title": "HTTP request rate by endpoint",
       "gridPos": {"x": 0, "y": 5, "w": 12, "h": 9},
-      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"stockpilot\"}[2m])) by (handler, method)", "legendFormat": "{{method}} {{handler}}"}],
+      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"invenpilot\"}[2m])) by (handler, method)", "legendFormat": "{{method}} {{handler}}"}],
       "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"lineWidth": 2, "fillOpacity": 12}}},
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}}
     },
@@ -47,9 +47,9 @@
       "id": 6, "type": "timeseries", "title": "Latency p50 / p95 / p99",
       "gridPos": {"x": 12, "y": 5, "w": 12, "h": 9},
       "targets": [
-        {"refId": "A", "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{namespace=\"stockpilot\"}[5m])) by (le))", "legendFormat": "p50"},
-        {"refId": "B", "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"stockpilot\"}[5m])) by (le))", "legendFormat": "p95"},
-        {"refId": "C", "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{namespace=\"stockpilot\"}[5m])) by (le))", "legendFormat": "p99"}
+        {"refId": "A", "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{namespace=\"invenpilot\"}[5m])) by (le))", "legendFormat": "p50"},
+        {"refId": "B", "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"invenpilot\"}[5m])) by (le))", "legendFormat": "p95"},
+        {"refId": "C", "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{namespace=\"invenpilot\"}[5m])) by (le))", "legendFormat": "p99"}
       ],
       "fieldConfig": {"defaults": {"unit": "s", "custom": {"lineWidth": 2}}},
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}}
@@ -57,14 +57,14 @@
     {
       "id": 7, "type": "timeseries", "title": "Responses by status code",
       "gridPos": {"x": 0, "y": 14, "w": 12, "h": 8},
-      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"stockpilot\"}[2m])) by (status)", "legendFormat": "{{status}}"}],
+      "targets": [{"refId": "A", "expr": "sum(rate(http_requests_total{namespace=\"invenpilot\"}[2m])) by (status)", "legendFormat": "{{status}}"}],
       "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "bars", "fillOpacity": 60, "stacking": {"mode": "normal"}}}},
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
     },
     {
       "id": 8, "type": "timeseries", "title": "Backend CPU (cores) — HPA input",
       "gridPos": {"x": 12, "y": 14, "w": 12, "h": 8},
-      "targets": [{"refId": "A", "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"stockpilot\", container=\"backend\"}[2m])) by (pod)", "legendFormat": "{{pod}}"}],
+      "targets": [{"refId": "A", "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"invenpilot\", container=\"backend\"}[2m])) by (pod)", "legendFormat": "{{pod}}"}],
       "fieldConfig": {"defaults": {"unit": "cores", "custom": {"lineWidth": 2, "fillOpacity": 10}}},
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
     }

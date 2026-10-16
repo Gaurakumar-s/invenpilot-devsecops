@@ -8,8 +8,8 @@ minikube addons enable ingress
 minikube addons enable metrics-server
 kubectl apply -f "$ROOT/k8s/namespace.yaml"
 "$ROOT/monitoring/install.sh"
-helm upgrade --install stockpilot "$ROOT/helm/stockpilot" -n stockpilot \
-  -f "$ROOT/helm/stockpilot/values-minikube.yaml" --wait --timeout 5m
+helm upgrade --install invenpilot "$ROOT/helm/invenpilot" -n invenpilot \
+  -f "$ROOT/helm/invenpilot/values-minikube.yaml" --wait --timeout 5m
 echo
-echo "Add to /etc/hosts:   $(minikube ip)  stockpilot.local"
-echo "Then open http://stockpilot.local/   (on macOS/docker driver use: minikube tunnel + 127.0.0.1)"
+echo "Add to /etc/hosts:   $(minikube ip)  invenpilot.local"
+echo "Then open http://invenpilot.local/   (on macOS/docker driver use: minikube tunnel + 127.0.0.1)"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install ArgoCD and register the StockPilot application.
+# Install ArgoCD and register the InvenPilot application.
 #   ./argocd/install.sh eks       (default)
 #   ./argocd/install.sh minikube
 set -euo pipefail

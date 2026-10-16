@@ -58,8 +58,8 @@ export default function App() {
     <div className="app">
       <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
         <div className="brand">
-          <span className="brand-mark">S</span>
-          <div><b>StockPilot</b><small>Inventory control</small></div>
+          <span className="brand-mark">I</span>
+          <div><b>InvenPilot</b><small>Inventory control</small></div>
         </div>
         <nav>
           <a className="active">▦ <span>Dashboard</span></a>

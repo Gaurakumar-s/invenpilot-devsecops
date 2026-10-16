@@ -1,6 +1,6 @@
 # terraform/ — AWS VPC + EKS
 
-Provisions the production-style infrastructure for StockPilot:
+Provisions the production-style infrastructure for InvenPilot:
 
 | Resource | Details |
 |---|---|
@@ -21,7 +21,7 @@ terraform fmt -check -recursive
 terraform validate
 terraform plan -out tfplan
 terraform apply tfplan                           # ~15 minutes
-aws eks update-kubeconfig --region ap-southeast-2 --name stockpilot-eks
+aws eks update-kubeconfig --region ap-southeast-2 --name invenpilot-eks
 kubectl get nodes
 ```
 

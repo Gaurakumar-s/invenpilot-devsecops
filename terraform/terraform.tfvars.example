@@ -3,9 +3,9 @@
 # (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY / AWS_PROFILE).
 
 aws_region      = "ap-southeast-2"
-project         = "stockpilot"
+project         = "invenpilot"
 environment     = "dev"
-cluster_name    = "stockpilot-eks"
+cluster_name    = "invenpilot-eks"
 cluster_version = "1.36"
 
 vpc_cidr        = "10.20.0.0/16"

@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: backend
   labels:
-    {{- include "stockpilot.labels" . | nindent 4 }}
+    {{- include "invenpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/name: {{ include "stockpilot.name" . }}
+    app.kubernetes.io/name: {{ include "invenpilot.name" . }}
     app.kubernetes.io/component: backend
   ports:
     - name: http

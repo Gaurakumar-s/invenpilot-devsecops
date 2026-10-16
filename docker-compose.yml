@@ -1,30 +1,30 @@
-# StockPilot local stack: PostgreSQL + FastAPI backend + React/Nginx frontend
+# InvenPilot local stack: PostgreSQL + FastAPI backend + React/Nginx frontend
 # Run:  docker compose up --build      Open: http://localhost:3000
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: stockpilot-postgres
+    container_name: invenpilot-postgres
     environment:
-      POSTGRES_DB: stockpilot
-      POSTGRES_USER: stockpilot
-      POSTGRES_PASSWORD: stockpilot
+      POSTGRES_DB: invenpilot
+      POSTGRES_USER: invenpilot
+      POSTGRES_PASSWORD: invenpilot
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U stockpilot -d stockpilot"]
+      test: ["CMD-SHELL", "pg_isready -U invenpilot -d invenpilot"]
       interval: 5s
       timeout: 3s
       retries: 10
 
   backend:
     build: ./backend
-    image: stockpilot-backend:local
-    container_name: stockpilot-backend
+    image: invenpilot-backend:local
+    container_name: invenpilot-backend
     environment:
-      APP_NAME: StockPilot API
-      DATABASE_URL: postgresql+psycopg://stockpilot:stockpilot@postgres:5432/stockpilot
+      APP_NAME: InvenPilot API
+      DATABASE_URL: postgresql+psycopg://invenpilot:invenpilot@postgres:5432/invenpilot
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,8 +33,8 @@ services:
 
   frontend:
     build: ./frontend
-    image: stockpilot-frontend:local
-    container_name: stockpilot-frontend
+    image: invenpilot-frontend:local
+    container_name: invenpilot-frontend
     depends_on:
       - backend
     ports:

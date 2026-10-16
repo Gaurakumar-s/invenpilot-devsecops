@@ -3,18 +3,18 @@ kind: Deployment
 metadata:
   name: backend
   labels:
-    {{- include "stockpilot.labels" . | nindent 4 }}
+    {{- include "invenpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
   replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "stockpilot.name" . }}
+      app.kubernetes.io/name: {{ include "invenpilot.name" . }}
       app.kubernetes.io/component: backend
   template:
     metadata:
       labels:
-        {{- include "stockpilot.labels" . | nindent 8 }}
+        {{- include "invenpilot.labels" . | nindent 8 }}
         app.kubernetes.io/component: backend
       annotations:
         prometheus.io/scrape: "true"
@@ -49,7 +49,7 @@ spec:
               drop: [ALL]
       containers:
         - name: backend
-          image: {{ include "stockpilot.backendImage" . | quote }}
+          image: {{ include "invenpilot.backendImage" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -58,7 +58,7 @@ spec:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: stockpilot-db
+                  name: invenpilot-db
                   key: DATABASE_URL
             {{- range $k, $v := .Values.backend.env }}
             - name: {{ $k }}

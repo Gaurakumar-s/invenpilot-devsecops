@@ -17,7 +17,7 @@ prometheus:
 grafana:
   enabled: true
   adminUser: admin
-  adminPassword: stockpilot-admin   # demo only
+  adminPassword: invenpilot-admin   # demo only
   service:
     type: ClusterIP
   sidecar:

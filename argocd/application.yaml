@@ -1,25 +1,25 @@
-# ArgoCD Application: GitOps deployment of the StockPilot Helm chart (EKS).
-# CI writes the new image SHA into helm/stockpilot/values.yaml; ArgoCD syncs it.
+# ArgoCD Application: GitOps deployment of the InvenPilot Helm chart (EKS).
+# CI writes the new image SHA into helm/invenpilot/values.yaml; ArgoCD syncs it.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: stockpilot
+  name: invenpilot
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://github.com/Gaurakumar-s/stockpilot-devsecops.git
+    repoURL: https://github.com/Gaurakumar-s/invenpilot-devsecops.git
     targetRevision: main
-    path: helm/stockpilot
+    path: helm/invenpilot
     helm:
       valueFiles:
         - values.yaml
         - values-eks.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: stockpilot
+    namespace: invenpilot
   syncPolicy:
     automated:
       prune: true

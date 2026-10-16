@@ -1,12 +1,12 @@
-# StockPilot — Inventory Management · DevSecOps Capstone
+# InvenPilot — Inventory Management · DevSecOps Capstone
 
-[![CI/CD](https://github.com/Gaurakumar-s/stockpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Gaurakumar-s/stockpilot-devsecops/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml)
 
-![StockPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
+![InvenPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
 
 ### Presentation video
 
-[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](https://gaurakumar-s.github.io/stockpilot-devsecops/demo/)
+[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)
 
 *Click the image to play the video in your browser. The file itself is [`demo/presentation.mp4`](demo/presentation.mp4) in this repository.*
 
@@ -15,7 +15,7 @@
 | Slide deck | [`demo/slides.pdf`](demo/slides.pdf) · [`demo/slides.pptx`](demo/slides.pptx) |
 | Every rubric item and its screenshot | [`docs/screenshots/README.md`](docs/screenshots/README.md) |
 
-StockPilot is a small but production-shaped **inventory management** application. A warehouse team can
+InvenPilot is a small but production-shaped **inventory management** application. A warehouse team can
 register products (SKU, category, quantity, reorder level, unit price), record **stock IN / OUT
 movements**, and see **low-stock and out-of-stock alerts** plus KPI cards on a live dashboard.
 
@@ -34,7 +34,7 @@ monitored Kubernetes cluster on AWS:
                  Terraform ──▶ AWS VPC + EKS         ▼
                                    │             ArgoCD (auto-sync)
                                    ▼                 │
-                        ┌──────── namespace: stockpilot ────────┐
+                        ┌──────── namespace: invenpilot ────────┐
                         │ Ingress  /  ──▶ frontend (Nginx) ×2   │
                         │          /api ▶ backend (FastAPI) ×2  │──▶ PostgreSQL (PVC)
                         │                  HPA 2→6              │
@@ -132,7 +132,7 @@ Migrations run automatically on container start (`alembic upgrade head && uvicor
 ├── .github/workflows/       ci-cd.yml
 ├── terraform/               AWS VPC + EKS (+ EBS CSI IRSA), terraform.tfvars.example
 ├── k8s/                     namespace.yaml
-├── helm/stockpilot/         Chart.yaml, values*.yaml, templates/
+├── helm/invenpilot/         Chart.yaml, values*.yaml, templates/
 ├── argocd/                  Application manifests + install.sh
 ├── monitoring/              kube-prometheus-stack values, Grafana dashboard JSON, install.sh
 ├── scripts/                 seed.sh, load-test.sh, eks-bootstrap.sh, minikube-bootstrap.sh
@@ -147,14 +147,14 @@ Migrations run automatically on container start (`alembic upgrade head && uvicor
 Prerequisites: Docker Desktop (or Docker Engine + Compose v2).
 
 ```bash
-git clone https://github.com/Gaurakumar-s/stockpilot-devsecops.git
-cd stockpilot-devsecops
+git clone https://github.com/Gaurakumar-s/invenpilot-devsecops.git
+cd invenpilot-devsecops
 docker compose up --build
 ```
 
 | URL | What |
 |---|---|
-| http://localhost:3000 | StockPilot dashboard |
+| http://localhost:3000 | InvenPilot dashboard |
 | http://localhost:8000/docs | Swagger UI |
 | http://localhost:8000/health · `/ready` · `/metrics` | Ops endpoints |
 
@@ -215,13 +215,13 @@ pull request to `main` (plus manual dispatch).
 | 1 | `backend-test` | setup-python 3.12 → `pip install` → `ruff check` → `pytest -v` | red tests fail the build |
 | 2 | `frontend-build` | setup-node 22 → `npm ci` → `vite build` → upload `dist/` artifact | build error fails |
 | 3 | `build-scan-push` | buildx builds both images → **Trivy** scans both → push to GHCR | HIGH/CRITICAL CVE fails; nothing is pushed unless scans pass |
-| 4 | `update-gitops` | writes the new SHA into `helm/stockpilot/values.yaml` and commits `[skip ci]` | only on push to `main` |
+| 4 | `update-gitops` | writes the new SHA into `helm/invenpilot/values.yaml` and commits `[skip ci]` | only on push to `main` |
 
 Images are published as
 
 ```text
-ghcr.io/gaurakumar-s/stockpilot-backend:<40-char git sha>
-ghcr.io/gaurakumar-s/stockpilot-frontend:<40-char git sha>
+ghcr.io/gaurakumar-s/invenpilot-backend:<40-char git sha>
+ghcr.io/gaurakumar-s/invenpilot-frontend:<40-char git sha>
 ```
 
 There is deliberately **no `latest` tag**: every running pod can be traced to the exact commit that
@@ -281,7 +281,7 @@ Directory: [`terraform/`](terraform/) (see its README for details).
 | VPC | `10.20.0.0/16`, DNS hostnames enabled |
 | Public subnets | `10.20.101.0/24`, `10.20.102.0/24` (AZ a/b) — tagged `kubernetes.io/role/elb` for the ingress load balancer |
 | Private subnets | `10.20.1.0/24`, `10.20.2.0/24` — EKS worker nodes, egress through one NAT gateway |
-| EKS | `stockpilot-eks`, Kubernetes 1.36, public API endpoint, cluster creator = admin |
+| EKS | `invenpilot-eks`, Kubernetes 1.36, public API endpoint, cluster creator = admin |
 | Node group | managed, `m7i-flex.large` × 2 (2 vCPU / 8 GiB each; min 2 / max 2 because the account vCPU quota is 5 and the AWS free plan only permits free-tier-eligible types), Amazon Linux 2023 |
 | Add-ons | coredns, kube-proxy, vpc-cni, **aws-ebs-csi-driver** (EBS policy attached to the node role, because the account's organization policy blocks IAM OIDC providers) so PVCs bind |
 
@@ -292,7 +292,7 @@ terraform init
 terraform validate
 terraform plan -out tfplan
 terraform apply tfplan                           # ≈ 15 min
-aws eks update-kubeconfig --region ap-southeast-2 --name stockpilot-eks
+aws eks update-kubeconfig --region ap-southeast-2 --name invenpilot-eks
 ```
 
 Tear-down (mandatory after the demo, ≈ $0.25/hour while running):
@@ -307,9 +307,9 @@ No credentials are stored in the repository: Terraform reads them from the AWS C
 
 ![terraform plan: 53 resources to add](docs/screenshots/12-terraform-plan.png)
 
-![AWS console: stockpilot-vpc in ap-southeast-2](docs/screenshots/13-aws-vpc.png)
+![AWS console: invenpilot-vpc in ap-southeast-2](docs/screenshots/13-aws-vpc.png)
 
-![AWS console: four stockpilot subnets across two availability zones](docs/screenshots/13b-aws-subnets.png)
+![AWS console: four invenpilot subnets across two availability zones](docs/screenshots/13b-aws-subnets.png)
 
 ![EKS cluster, managed node group and EC2 nodes from the AWS CLI](docs/screenshots/14-aws-eks-cli.png)
 
@@ -320,7 +320,7 @@ No credentials are stored in the repository: Terraform reads them from the AWS C
 
 ## 9. Kubernetes — Helm + ArgoCD
 
-### Chart: `helm/stockpilot`
+### Chart: `helm/invenpilot`
 
 | Template | Resource |
 |---|---|
@@ -339,9 +339,9 @@ Values files: `values.yaml` (defaults, image tag written by CI), `values-minikub
 
 ```bash
 kubectl apply -f k8s/namespace.yaml
-helm upgrade --install stockpilot ./helm/stockpilot -n stockpilot -f helm/stockpilot/values-eks.yaml
-kubectl get pods,svc,ingress,hpa -n stockpilot
-helm list -n stockpilot
+helm upgrade --install invenpilot ./helm/invenpilot -n invenpilot -f helm/invenpilot/values-eks.yaml
+kubectl get pods,svc,ingress,hpa -n invenpilot
+helm list -n invenpilot
 ```
 
 ### Deploy with ArgoCD (GitOps — used in the demo)
@@ -351,7 +351,7 @@ helm list -n stockpilot
 kubectl port-forward svc/argocd-server -n argocd 8443:443   # https://localhost:8443  (admin / printed password)
 ```
 
-`argocd/application.yaml` points at `helm/stockpilot` on `main` with automated sync, prune and
+`argocd/application.yaml` points at `helm/invenpilot` on `main` with automated sync, prune and
 self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls the Deployments.
 
 ---
@@ -360,7 +360,7 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
 
 ![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
 
-![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
+![helm list: the invenpilot release deployed](docs/screenshots/18-helm-list-eks.png)
 
 ![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
 
@@ -374,7 +374,7 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
   [`kube-prometheus-stack-values.yaml`](monitoring/kube-prometheus-stack-values.yaml)
   (`serviceMonitorSelectorNilUsesHelmValues: false` so it discovers the app's ServiceMonitor).
 * The chart's `ServiceMonitor` (label `release: kube-prometheus-stack`) scrapes the `backend` Service
-  every 15 s → the **Targets** page shows `stockpilot/stockpilot-backend` as `UP`.
+  every 15 s → the **Targets** page shows `invenpilot/invenpilot-backend` as `UP`.
 * [`monitoring/grafana-dashboard.json`](monitoring/grafana-dashboard.json) is loaded by the Grafana
   sidecar (ConfigMap label `grafana_dashboard=1`) and shows: requests/sec, total requests, 5xx error
   rate, backend pods running, request rate by endpoint, p50/p95/p99 latency, responses by status code,
@@ -382,13 +382,13 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
 
 ```bash
 kubectl port-forward svc/kube-prometheus-stack-prometheus -n monitoring 9090:9090   # http://localhost:9090/targets
-kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80      # http://localhost:3001  admin / stockpilot-admin
+kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80      # http://localhost:3001  admin / invenpilot-admin
 ./scripts/load-test.sh http://<ingress-host> 600                                     # populate the panels
 ```
 
 ![Prometheus targets: both backend pods UP](docs/screenshots/21-prometheus-targets-up-eks.png)
 
-![Grafana: StockPilot application metrics with live traffic](docs/screenshots/22-grafana-dashboard-eks.png)
+![Grafana: InvenPilot application metrics with live traffic](docs/screenshots/22-grafana-dashboard-eks.png)
 
 
 ---
@@ -408,7 +408,7 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
 
 * **PostgreSQL runs inside the cluster** (single replica + PVC). Fine for a demo; a production
   deployment would use Amazon RDS and an external secret manager instead of a Helm value.
-* **Demo credentials** (`stockpilot/stockpilot`, Grafana `stockpilot-admin`) are committed on purpose
+* **Demo credentials** (`invenpilot/invenpilot`, Grafana `invenpilot-admin`) are committed on purpose
   for reproducibility; rotate them for anything real.
 * **GHCR packages must be public** (or an `imagePullSecret` added to `values.yaml`) for the cluster to
   pull images.
