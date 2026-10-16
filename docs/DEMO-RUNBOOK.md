@@ -127,8 +127,7 @@ git add docs/screenshots && git commit -m "docs: add AWS, ArgoCD and EKS evidenc
 ## 9. DESTROY (mandatory)
 
 ```bash
-helm uninstall ingress-nginx -n ingress-nginx     # frees the ELB so the VPC can be deleted
-cd terraform && terraform destroy -auto-approve   # screenshot 15-terraform-destroy.png
+./scripts/eks-teardown.sh      # app -> load balancer -> leftover ENIs -> terraform destroy -> leftovers check
 ```
 Check the AWS console: EC2 → Load Balancers empty, EKS → no clusters, VPC → no stockpilot-vpc.
 
