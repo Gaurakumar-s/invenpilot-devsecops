@@ -4,6 +4,9 @@
 
 ![InvenPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
 
+
+> **Note on naming:** the project was renamed from *StockPilot* to *InvenPilot* on 16 October 2026. The recorded video and some evidence screenshots were captured before the rename and show the earlier name; the code, chart, images and infrastructure all use InvenPilot.
+
 ### Presentation video
 
 [![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)
