@@ -4,7 +4,7 @@ image:
   registry: ghcr.io/gaurakumar-s
   backend: invenpilot-backend
   frontend: invenpilot-frontend
-  tag: "2bad1eb360058b581658b048daf63d862dfdd361"
+  tag: "ba32c949b210f6cd57fae6b846d598475796eddb"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
