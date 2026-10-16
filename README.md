@@ -2,6 +2,16 @@
 
 [![CI/CD](https://github.com/Gaurakumar-s/stockpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Gaurakumar-s/stockpilot-devsecops/actions/workflows/ci-cd.yml)
 
+![StockPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
+
+| | |
+|---|---|
+| Presentation video (6 min) | [`demo/presentation.mp4`](demo/presentation.mp4) |
+| Slide deck | [`demo/slides.pdf`](demo/slides.pdf) · [`demo/slides.pptx`](demo/slides.pptx) |
+| Every rubric item and its screenshot | [`docs/screenshots/README.md`](docs/screenshots/README.md) |
+| AWS day runbook and teardown | [`docs/DEMO-RUNBOOK.md`](docs/DEMO-RUNBOOK.md) |
+| Video script | [`docs/VIDEO-SCRIPT.md`](docs/VIDEO-SCRIPT.md) |
+
 StockPilot is a small but production-shaped **inventory management** application. A warehouse team can
 register products (SKU, category, quantity, reorder level, unit price), record **stock IN / OUT
 movements**, and see **low-stock and out-of-stock alerts** plus KPI cards on a live dashboard.
@@ -167,6 +177,9 @@ alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
 
+![docker compose up --build: PostgreSQL healthy, backend migrated, frontend serving on :3000](docs/screenshots/04-compose-up.png)
+
+
 ---
 
 ## 5. Running tests
@@ -183,6 +196,9 @@ pytest -v
 * 20 tests cover `/`, `/health`, `/ready`, `/metrics`, product CRUD (201/404/409/422/204), stats
   maths, low-stock filter, stock movements and the insufficient-stock guard.
 * `pytest.ini` sets `pythonpath`, `testpaths` and verbose output.
+
+![pytest -v: 20 passed on an in-memory SQLite database](docs/screenshots/02-pytest-v.png)
+
 
 ---
 
@@ -210,6 +226,11 @@ produced it, and rollbacks are a one-line change in `values.yaml`.
 
 Job 4 is the GitOps hand-off: the pipeline never runs `kubectl`; it changes the desired state in Git and
 ArgoCD reconciles the cluster.
+
+![Green GitHub Actions run: test, build, Trivy scan, GHCR push, GitOps bump](docs/screenshots/09-actions-green.png)
+
+![GHCR package page: public images tagged only with commit SHAs](docs/screenshots/10-ghcr-packages-sha.png)
+
 
 ---
 
@@ -241,6 +262,9 @@ Other hardening: both containers run as **non-root** (uid 10001 / 101), Kubernet
 capabilities and disallow privilege escalation, `.gitignore` blocks `.env`, `*.tfstate`,
 `terraform.tfvars`, and the workflow uses a least-privilege `GITHUB_TOKEN` (`packages: write` only in
 the job that pushes).
+
+![Trivy output from the pipeline: both images clean, 0 HIGH / 0 CRITICAL](docs/screenshots/11b-trivy-ci.png)
+
 
 ---
 
@@ -277,6 +301,17 @@ terraform destroy -auto-approve
 
 No credentials are stored in the repository: Terraform reads them from the AWS CLI profile.
 `terraform.tfvars.example` documents every variable.
+
+![terraform plan: 53 resources to add](docs/screenshots/12-terraform-plan.png)
+
+![AWS console: stockpilot-vpc in ap-southeast-2](docs/screenshots/13-aws-vpc.png)
+
+![AWS console: four stockpilot subnets across two availability zones](docs/screenshots/13b-aws-subnets.png)
+
+![EKS cluster, managed node group and EC2 nodes from the AWS CLI](docs/screenshots/14-aws-eks-cli.png)
+
+![terraform destroy: 53 resources removed, AWS checked empty](docs/screenshots/15-terraform-destroy.png)
+
 
 ---
 
@@ -324,6 +359,15 @@ echo "$(minikube ip) stockpilot.local" | sudo tee -a /etc/hosts
 open http://stockpilot.local
 ```
 
+![kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running](docs/screenshots/16-kubectl-get-pods-eks.png)
+
+![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
+
+![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
+
+![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
+
+
 ---
 
 ## 10. Observability — Prometheus + Grafana
@@ -346,6 +390,11 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
 ./scripts/load-test.sh http://<ingress-host> 600                                     # populate the panels
 # minikube: HOST_HEADER=stockpilot.local ./scripts/load-test.sh http://127.0.0.1:8081
 ```
+
+![Prometheus targets: both backend pods UP](docs/screenshots/21-prometheus-targets-up-eks.png)
+
+![Grafana: StockPilot application metrics with live traffic](docs/screenshots/22-grafana-dashboard-eks.png)
+
 
 ---
 
