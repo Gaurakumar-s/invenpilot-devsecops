@@ -2,18 +2,15 @@
 
 [![CI/CD](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml)
 
+**▶ [Demo video (6 min 19 s)](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)** · **[Slide deck (PDF, 14 pages)](demo/slides.pdf)** · **[Evidence screenshots](docs/screenshots/README.md)**
+
 ![StockPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
-
-### Presentation video
-
-[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)
-
-*Click the image to play the video in your browser. The file itself is [`demo/presentation.mp4`](demo/presentation.mp4) in this repository.*
 
 | | |
 |---|---|
-| Slide deck | [`demo/slides.pdf`](demo/slides.pdf) · [`demo/slides.pptx`](demo/slides.pptx) |
-| Every rubric item and its screenshot | [`docs/screenshots/README.md`](docs/screenshots/README.md) |
+| **Demo video (6 min 19 s)** | **[Watch in the browser](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)**: narrated walkthrough of slides, codebase, a live pipeline run, Trivy, Terraform + AWS console, ArgoCD, Kubernetes, Prometheus and Grafana (the file is [`demo/presentation.mp4`](demo/presentation.mp4)) |
+| **Slide deck (14 pages)** | [`demo/slides.pdf`](demo/slides.pdf) · [`demo/slides.pptx`](demo/slides.pptx): overview, stack, architecture, CI/CD, security, Terraform, Kubernetes/Helm/ArgoCD, observability, learnings, plus four evidence pages |
+| **Every rubric item and its screenshot** | [`docs/screenshots/README.md`](docs/screenshots/README.md) |
 
 StockPilot is a small but production-shaped **inventory management** application. A warehouse team can
 register products (SKU, category, quantity, reorder level, unit price), record **stock IN / OUT
