@@ -1,9 +1,9 @@
-# ArgoCD Application: GitOps deployment of the InvenPilot Helm chart (minikube).
-# CI writes the new image SHA into helm/invenpilot/values.yaml; ArgoCD syncs it.
+# ArgoCD Application: GitOps deployment of the StockPilot Helm chart (minikube).
+# CI writes the new image SHA into helm/stockpilot/values.yaml; ArgoCD syncs it.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: invenpilot
+  name: stockpilot
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -12,14 +12,14 @@ spec:
   source:
     repoURL: https://github.com/Gaurakumar-s/invenpilot-devsecops.git
     targetRevision: main
-    path: helm/invenpilot
+    path: helm/stockpilot
     helm:
       valueFiles:
         - values.yaml
         - values-minikube.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: invenpilot
+    namespace: stockpilot
   syncPolicy:
     automated:
       prune: true

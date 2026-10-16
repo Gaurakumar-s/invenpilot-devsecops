@@ -3,18 +3,18 @@ kind: Deployment
 metadata:
   name: frontend
   labels:
-    {{- include "invenpilot.labels" . | nindent 4 }}
+    {{- include "stockpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "invenpilot.name" . }}
+      app.kubernetes.io/name: {{ include "stockpilot.name" . }}
       app.kubernetes.io/component: frontend
   template:
     metadata:
       labels:
-        {{- include "invenpilot.labels" . | nindent 8 }}
+        {{- include "stockpilot.labels" . | nindent 8 }}
         app.kubernetes.io/component: frontend
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -27,7 +27,7 @@ spec:
         runAsGroup: 101
       containers:
         - name: frontend
-          image: {{ include "invenpilot.frontendImage" . | quote }}
+          image: {{ include "stockpilot.frontendImage" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "project" {
   description = "Project name used for resource naming and tags"
   type        = string
-  default     = "invenpilot"
+  default     = "stockpilot"
 }
 
 variable "environment" {
@@ -43,7 +43,7 @@ variable "private_subnets" {
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
-  default     = "invenpilot-eks"
+  default     = "stockpilot-eks"
 }
 
 variable "cluster_version" {

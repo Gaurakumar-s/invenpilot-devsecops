@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Generate HTTP traffic so Prometheus/Grafana panels (and the HPA) have data.
 #   ./scripts/load-test.sh http://<ingress-host> [requests=600]
-#   HOST_HEADER=invenpilot.local ./scripts/load-test.sh http://127.0.0.1:8081   # minikube via port-forward
+#   HOST_HEADER=stockpilot.local ./scripts/load-test.sh http://127.0.0.1:8081   # minikube via port-forward
 set -euo pipefail
 BASE="${1:-http://localhost:8000}"
 N="${2:-600}"

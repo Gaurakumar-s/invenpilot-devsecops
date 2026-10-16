@@ -2,7 +2,7 @@ def test_root_lists_service_metadata(client):
     response = client.get("/")
     assert response.status_code == 200
     body = response.json()
-    assert body["service"] == "InvenPilot API"
+    assert body["service"] == "StockPilot API"
     assert body["docs"] == "/docs"
 
 

@@ -1,10 +1,10 @@
-# Default values for the InvenPilot chart.
+# Default values for the StockPilot chart.
 # Image tag is written by the CI pipeline (GitOps): it is always a Git commit SHA.
 image:
   registry: ghcr.io/gaurakumar-s
-  backend: invenpilot-backend
-  frontend: invenpilot-frontend
-  tag: "ba32c949b210f6cd57fae6b846d598475796eddb"
+  backend: stockpilot-backend
+  frontend: stockpilot-frontend
+  tag: "2bad1eb360058b581658b048daf63d862dfdd361"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -16,7 +16,7 @@ backend:
     requests: {cpu: 100m, memory: 128Mi}
     limits: {cpu: 500m, memory: 512Mi}
   env:
-    APP_NAME: "InvenPilot API"
+    APP_NAME: "StockPilot API"
 
 frontend:
   replicaCount: 2
@@ -28,10 +28,10 @@ frontend:
 postgres:
   enabled: true
   image: postgres:16-alpine
-  database: invenpilot
-  username: invenpilot
+  database: stockpilot
+  username: stockpilot
   # Demo credential only. In production inject via an external secret manager.
-  password: invenpilot
+  password: stockpilot
   storage: 2Gi
   storageClassName: ""   # "" = cluster default (gp2 on EKS, standard on minikube)
   resources:

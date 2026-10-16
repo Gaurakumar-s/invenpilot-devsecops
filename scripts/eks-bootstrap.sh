@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REGION="${AWS_REGION:-ap-southeast-2}"
-CLUSTER="${CLUSTER_NAME:-invenpilot-eks}"
+CLUSTER="${CLUSTER_NAME:-stockpilot-eks}"
 
 echo "==> kubeconfig"
 aws eks update-kubeconfig --region "$REGION" --name "$CLUSTER"
@@ -27,7 +27,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server -n kube-syst
 echo "==> Prometheus + Grafana"
 "$ROOT/monitoring/install.sh"
 
-echo "==> ArgoCD + InvenPilot application"
+echo "==> ArgoCD + StockPilot application"
 "$ROOT/argocd/install.sh" eks
 
 echo

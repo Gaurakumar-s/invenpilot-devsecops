@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install Prometheus + Grafana (kube-prometheus-stack) and load the InvenPilot dashboard.
+# Install Prometheus + Grafana (kube-prometheus-stack) and load the StockPilot dashboard.
 set -euo pipefail
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -12,12 +12,12 @@ helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheu
   --wait --timeout 10m
 
 # Grafana sidecar picks up any ConfigMap labelled grafana_dashboard=1
-kubectl create configmap invenpilot-dashboard -n monitoring \
-  --from-file=invenpilot.json="$DIR/grafana-dashboard.json" \
+kubectl create configmap stockpilot-dashboard -n monitoring \
+  --from-file=stockpilot.json="$DIR/grafana-dashboard.json" \
   --dry-run=client -o yaml \
   | kubectl label --local -f - grafana_dashboard=1 -o yaml \
   | kubectl apply -f -
 
 echo
 echo "Prometheus: kubectl port-forward svc/kube-prometheus-stack-prometheus -n monitoring 9090:9090  -> http://localhost:9090/targets"
-echo "Grafana:    kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80    -> http://localhost:3001 (admin / invenpilot-admin)"
+echo "Grafana:    kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80    -> http://localhost:3001 (admin / stockpilot-admin)"

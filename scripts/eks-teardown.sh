@@ -6,9 +6,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 R="${AWS_REGION:-ap-southeast-2}"
 
 echo "==> remove the application (ArgoCD + Helm) so the Postgres EBS volume is released"
-kubectl delete application invenpilot -n argocd --timeout=180s 2>/dev/null || true
-helm uninstall invenpilot -n invenpilot 2>/dev/null || true
-kubectl delete pvc --all -n invenpilot --timeout=120s 2>/dev/null || true
+kubectl delete application stockpilot -n argocd --timeout=180s 2>/dev/null || true
+helm uninstall stockpilot -n stockpilot 2>/dev/null || true
+kubectl delete pvc --all -n stockpilot --timeout=120s 2>/dev/null || true
 for i in $(seq 1 30); do [ "$(kubectl get pv --no-headers 2>/dev/null | wc -l | tr -d ' ')" = "0" ] && break; sleep 5; done
 
 echo "==> remove ingress-nginx so the AWS load balancer is deleted"

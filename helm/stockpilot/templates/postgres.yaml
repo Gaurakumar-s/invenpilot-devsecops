@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-data
   labels:
-    {{- include "invenpilot.labels" . | nindent 4 }}
+    {{- include "stockpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: postgres
 spec:
   accessModes: [ReadWriteOnce]
@@ -20,12 +20,12 @@ kind: Service
 metadata:
   name: postgres
   labels:
-    {{- include "invenpilot.labels" . | nindent 4 }}
+    {{- include "stockpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: postgres
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/name: {{ include "invenpilot.name" . }}
+    app.kubernetes.io/name: {{ include "stockpilot.name" . }}
     app.kubernetes.io/component: postgres
   ports:
     - name: postgres
@@ -37,7 +37,7 @@ kind: Deployment
 metadata:
   name: postgres
   labels:
-    {{- include "invenpilot.labels" . | nindent 4 }}
+    {{- include "stockpilot.labels" . | nindent 4 }}
     app.kubernetes.io/component: postgres
 spec:
   replicas: 1
@@ -45,12 +45,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "invenpilot.name" . }}
+      app.kubernetes.io/name: {{ include "stockpilot.name" . }}
       app.kubernetes.io/component: postgres
   template:
     metadata:
       labels:
-        {{- include "invenpilot.labels" . | nindent 8 }}
+        {{- include "stockpilot.labels" . | nindent 8 }}
         app.kubernetes.io/component: postgres
     spec:
       containers:
@@ -60,7 +60,7 @@ spec:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: invenpilot-db
+                name: stockpilot-db
           env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata

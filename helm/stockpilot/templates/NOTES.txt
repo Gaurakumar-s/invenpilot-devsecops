@@ -1,4 +1,4 @@
-InvenPilot {{ .Chart.AppVersion }} deployed to namespace {{ .Release.Namespace }}.
+StockPilot {{ .Chart.AppVersion }} deployed to namespace {{ .Release.Namespace }}.
 
   kubectl get pods,svc,ingress,hpa -n {{ .Release.Namespace }}
 
@@ -9,4 +9,4 @@ Open:  http://{{ .Values.ingress.host }}/   (add the ingress IP to /etc/hosts)
 Open:  http://<ingress-nginx LoadBalancer hostname>/
 {{- end }}
 {{- end }}
-Backend image: {{ include "invenpilot.backendImage" . }}
+Backend image: {{ include "stockpilot.backendImage" . }}

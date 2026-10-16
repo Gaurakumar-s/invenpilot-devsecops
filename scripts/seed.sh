@@ -2,7 +2,7 @@
 # Seed demo inventory data.   Usage: ./scripts/seed.sh [http://localhost:8000]
 set -euo pipefail
 BASE="${1:-http://localhost:8000}"
-HDR=(); [ -n "${HOST_HEADER:-}" ] && HDR=(-H "Host: ${HOST_HEADER}")   # e.g. HOST_HEADER=invenpilot.local on minikube
+HDR=(); [ -n "${HOST_HEADER:-}" ] && HDR=(-H "Host: ${HOST_HEADER}")   # e.g. HOST_HEADER=stockpilot.local on minikube
 post() { curl -sS -o /dev/null ${HDR[@]+"${HDR[@]}"} -w "  %{http_code}  $2\n" -X POST "$BASE/api/products" -H 'Content-Type: application/json' -d "$1"; }
 echo "Seeding products at $BASE ..."
 post '{"sku":"LAP-001","name":"Dell Latitude 5540","category":"Laptops","description":"14-inch business laptop","quantity":18,"reorder_level":5,"unit_price":68999}' "Dell Latitude 5540"

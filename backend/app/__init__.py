@@ -1,1 +1,1 @@
-"""InvenPilot inventory management API."""
+"""StockPilot inventory management API."""
