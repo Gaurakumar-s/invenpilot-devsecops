@@ -6,9 +6,9 @@
 
 ### Presentation video
 
-[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](demo/presentation.mp4)
+[![Watch the 6-minute walkthrough: slides, pipeline run, Terraform, ArgoCD, Kubernetes, Prometheus and Grafana](docs/screenshots/00-video-thumbnail.png)](https://gaurakumar-s.github.io/stockpilot-devsecops/demo/)
 
-*Click the image to open [`demo/presentation.mp4`](demo/presentation.mp4) in GitHub's video player.*
+*Click the image to play the video in your browser. The file itself is [`demo/presentation.mp4`](demo/presentation.mp4) in this repository.*
 
 | | |
 |---|---|
