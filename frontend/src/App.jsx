@@ -83,7 +83,7 @@ export default function App() {
             <div>
               <p className="eyebrow">WAREHOUSE / OVERVIEW</p>
               <h1>Inventory dashboard</h1>
-              <p className="muted">Track stock levels, reorder alerts and movements in real time.</p>
+              <p className="muted">Track stock levels, reorder alerts and movements in real time. Demo build.</p>
             </div>
           </div>
           <button className="primary" onClick={() => setModal({ type: 'product' })}>＋ New product</button>
