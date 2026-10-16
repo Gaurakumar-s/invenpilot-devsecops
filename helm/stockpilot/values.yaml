@@ -4,7 +4,7 @@ image:
   registry: ghcr.io/gaurakumar-s
   backend: stockpilot-backend
   frontend: stockpilot-frontend
-  tag: "6aa09d5d3097580582e4cba9684d2b3729d37460"
+  tag: "f3e0345911dbfc48cf5da82dc0e902031e87ac20"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
