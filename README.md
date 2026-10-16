@@ -43,23 +43,6 @@ monitored Kubernetes cluster on AWS:
 
 ---
 
-## Table of contents
-
-1. [Features & API](#1-features--api)
-2. [Tech stack](#2-tech-stack)
-3. [Repository layout](#3-repository-layout)
-4. [Local setup — Docker Compose](#4-local-setup--docker-compose)
-5. [Running tests](#5-running-tests)
-6. [CI/CD pipeline](#6-cicd-pipeline)
-7. [Security scanning (Trivy)](#7-security-scanning-trivy)
-8. [Infrastructure — Terraform on AWS](#8-infrastructure--terraform-on-aws)
-9. [Kubernetes — Helm + ArgoCD](#9-kubernetes--helm--argocd)
-10. [Observability — Prometheus + Grafana](#10-observability--prometheus--grafana)
-11. [Demo & screenshots](#11-demo--screenshots)
-12. [Known issues & limitations](#12-known-issues--limitations)
-
----
-
 ## 1. Features & API
 
 | Area | Details |
@@ -113,29 +96,18 @@ Migrations run automatically on container start (`alembic upgrade head && uvicor
 
 ## 3. Repository layout
 
-```text
-.
-├── backend/                 FastAPI app
-│   ├── app/                 main.py, config.py, db.py, models.py, schemas.py, routers/
-│   ├── alembic/versions/    0001_create_products.py, 0002_create_stock_movements.py
-│   ├── tests/               conftest.py + 20 tests (health, products, movements)
-│   ├── Dockerfile           python:3.12-slim, non-root uid 10001
-│   └── requirements.txt
-├── frontend/                React + Vite dashboard
-│   ├── src/                 App.jsx, api.js, components/
-│   ├── nginx.conf           serves SPA, proxies /api → backend
-│   └── Dockerfile           node:22-alpine build → nginx-unprivileged runtime
-├── docker-compose.yml       postgres + backend + frontend (http://localhost:3000)
-├── .github/workflows/       ci-cd.yml
-├── terraform/               AWS VPC + EKS (+ EBS CSI IRSA), terraform.tfvars.example
-├── k8s/                     namespace.yaml
-├── helm/stockpilot/         Chart.yaml, values*.yaml, templates/
-├── argocd/                  Application manifests + install.sh
-├── monitoring/              kube-prometheus-stack values, Grafana dashboard JSON, install.sh
-├── scripts/                 seed.sh, load-test.sh, eks-bootstrap.sh, minikube-bootstrap.sh
-├── docs/screenshots/        evidence for every rubric module
-└── demo/                    slides.pptx / slides.pdf and presentation video
-```
+| Path | What it is |
+|---|---|
+| [`backend/`](backend/) | FastAPI app (`app/`), Alembic migrations, 20 pytest tests, non-root Dockerfile |
+| [`frontend/`](frontend/) | React + Vite dashboard, Nginx config, multi-stage Dockerfile |
+| [`docker-compose.yml`](docker-compose.yml) | the whole stack locally: PostgreSQL, backend, frontend |
+| [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml) | the CI/CD pipeline: test, build, Trivy, GHCR push, GitOps bump |
+| [`terraform/`](terraform/) | AWS VPC + EKS with the EBS CSI driver; `terraform.tfvars.example` |
+| [`k8s/`](k8s/) · [`helm/stockpilot/`](helm/stockpilot/) | namespace manifest and the Helm chart (Deployments, Services, Ingress, HPA, ServiceMonitor) |
+| [`argocd/`](argocd/) | ArgoCD Application and installer (GitOps) |
+| [`monitoring/`](monitoring/) | kube-prometheus-stack values, Grafana dashboard, installer |
+| [`scripts/`](scripts/) | seed data, load test, EKS bootstrap and teardown |
+| [`docs/screenshots/`](docs/screenshots/) · [`demo/`](demo/) | evidence per rubric module; slides and the presentation video |
 
 ---
 
@@ -166,19 +138,7 @@ Compose starts PostgreSQL with a healthcheck; the backend waits for it to be hea
 then starts Uvicorn. The frontend container proxies `/api/*` to the `backend` service so the browser
 only ever talks to one origin.
 
-### Run the backend without Docker
-
-```bash
-cd backend
-python3.12 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env            # points at localhost:5432
-alembic upgrade head
-uvicorn app.main:app --reload --port 8000
-```
-
 ![docker compose up --build: PostgreSQL healthy, backend migrated, frontend serving on :3000](docs/screenshots/04-compose-up.png)
-
 
 ---
 
@@ -198,7 +158,6 @@ pytest -v
 * `pytest.ini` sets `pythonpath`, `testpaths` and verbose output.
 
 ![pytest -v: 20 passed on an in-memory SQLite database](docs/screenshots/02-pytest-v.png)
-
 
 ---
 
@@ -230,7 +189,6 @@ ArgoCD reconciles the cluster.
 ![Green GitHub Actions run: test, build, Trivy scan, GHCR push, GitOps bump](docs/screenshots/09-actions-green.png)
 
 ![GHCR package page: public images tagged only with commit SHAs](docs/screenshots/10-ghcr-packages-sha.png)
-
 
 ---
 
@@ -264,7 +222,6 @@ capabilities and disallow privilege escalation, `.gitignore` blocks `.env`, `*.t
 the job that pushes).
 
 ![Trivy output from the pipeline: both images clean, 0 HIGH / 0 CRITICAL](docs/screenshots/11b-trivy-ci.png)
-
 
 ---
 
@@ -306,12 +263,7 @@ No credentials are stored in the repository: Terraform reads them from the AWS C
 
 ![AWS console: stockpilot-vpc in ap-southeast-2](docs/screenshots/13-aws-vpc.png)
 
-![AWS console: four stockpilot subnets across two availability zones](docs/screenshots/13b-aws-subnets.png)
-
-![EKS cluster, managed node group and EC2 nodes from the AWS CLI](docs/screenshots/14-aws-eks-cli.png)
-
 ![terraform destroy: 53 resources removed, AWS checked empty](docs/screenshots/15-terraform-destroy.png)
-
 
 ---
 
@@ -355,10 +307,6 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
 
 ![kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running](docs/screenshots/16-kubectl-get-pods-eks.png)
 
-![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
-
-![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
-
 ![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
 
 ---
@@ -387,21 +335,9 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
 
 ![Grafana: StockPilot application metrics with live traffic](docs/screenshots/22-grafana-dashboard-eks.png)
 
-
 ---
 
-## 11. Demo & screenshots
-
-* `demo/slides.pptx` / `demo/slides.pdf` — presentation deck (overview, stack, architecture, CI/CD,
-  security, Terraform, Kubernetes/Helm/ArgoCD, observability, learnings).
-* `demo/presentation.mp4` — recorded walkthrough (slides → codebase → CI run → GHCR → Trivy → Terraform +
-  AWS console → ArgoCD → kubectl → app via Ingress → Prometheus targets → Grafana).
-* `docs/screenshots/` — evidence per module (app, pytest, compose, Actions, GHCR, Trivy, Terraform
-  plan/apply/destroy, AWS console, kubectl, helm, ArgoCD, Prometheus, Grafana).
-
----
-
-## 12. Known issues & limitations
+## 11. Known issues & limitations
 
 * **PostgreSQL runs inside the cluster** (single replica + PVC). Fine for a demo; a production
   deployment would use Amazon RDS and an external secret manager instead of a Helm value.
