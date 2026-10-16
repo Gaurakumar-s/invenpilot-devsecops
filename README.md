@@ -1,10 +1,30 @@
-# StockPilot — Inventory Management · DevSecOps Capstone
+<h1 align="center">StockPilot — Inventory Management</h1>
 
-[![CI/CD](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml)
+<p align="center"><b>DevSecOps Final Capstone</b> · a small inventory app shipped through a complete, monitored delivery path to AWS EKS</p>
 
-**▶ [Demo video (6 min 19 s)](https://gaurakumar-s.github.io/invenpilot-devsecops/demo/)** · **[Slide deck (PDF, 14 pages)](demo/slides.pdf)** · **[Evidence screenshots](docs/screenshots/README.md)**
+<p align="center">
+  <a href="https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml"><img alt="CI/CD" src="https://github.com/Gaurakumar-s/invenpilot-devsecops/actions/workflows/ci-cd.yml/badge.svg"></a>
+  <img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.143-009688?logo=fastapi&logoColor=white">
+  <img alt="React 18" src="https://img.shields.io/badge/React-18-20232A?logo=react&logoColor=61DAFB">
+  <img alt="PostgreSQL 16" src="https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white">
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-multi--stage-2496ED?logo=docker&logoColor=white">
+  <img alt="Trivy" src="https://img.shields.io/badge/Trivy-0%20HIGH%2FCRITICAL-1904DA?logo=aquasecurity&logoColor=white">
+  <img alt="Terraform" src="https://img.shields.io/badge/Terraform-AWS%20EKS-7B42BC?logo=terraform&logoColor=white">
+  <img alt="Kubernetes" src="https://img.shields.io/badge/Kubernetes-1.36-326CE5?logo=kubernetes&logoColor=white">
+  <img alt="Helm" src="https://img.shields.io/badge/Helm-chart-0F1689?logo=helm&logoColor=white">
+  <img alt="ArgoCD" src="https://img.shields.io/badge/ArgoCD-GitOps-EF7B4D?logo=argo&logoColor=white">
+  <img alt="Prometheus" src="https://img.shields.io/badge/Prometheus-metrics-E6522C?logo=prometheus&logoColor=white">
+  <img alt="Grafana" src="https://img.shields.io/badge/Grafana-dashboard-F46800?logo=grafana&logoColor=white">
+</p>
 
-![StockPilot running on AWS EKS, reached through the ingress-nginx load balancer](docs/screenshots/19-app-via-ingress-eks.png)
+<p align="center">
+  <b>▶ <a href="https://gaurakumar-s.github.io/invenpilot-devsecops/demo/">Demo video (6 min 19 s)</a></b> &nbsp;·&nbsp;
+  <b><a href="demo/slides.pdf">Slide deck (PDF, 14 pages)</a></b> &nbsp;·&nbsp;
+  <b><a href="docs/screenshots/README.md">Evidence screenshots</a></b>
+</p>
+
+<p align="center"><img src="docs/screenshots/19-app-via-ingress-eks.png" alt="StockPilot running on AWS EKS, reached through the ingress-nginx load balancer" width="900"><br><sub>StockPilot running on AWS EKS, reached through the ingress-nginx load balancer</sub></p>
 
 | | |
 |---|---|
@@ -177,8 +197,7 @@ alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
 
-![docker compose up --build: PostgreSQL healthy, backend migrated, frontend serving on :3000](docs/screenshots/04-compose-up.png)
-
+<p align="center"><img src="docs/screenshots/04-compose-up.png" alt="docker compose up --build: PostgreSQL healthy, backend migrated, frontend serving on :3000" width="900"><br><sub>docker compose up --build: PostgreSQL healthy, backend migrated, frontend serving on :3000</sub></p>
 
 ---
 
@@ -197,8 +216,7 @@ pytest -v
   maths, low-stock filter, stock movements and the insufficient-stock guard.
 * `pytest.ini` sets `pythonpath`, `testpaths` and verbose output.
 
-![pytest -v: 20 passed on an in-memory SQLite database](docs/screenshots/02-pytest-v.png)
-
+<p align="center"><img src="docs/screenshots/02-pytest-v.png" alt="pytest -v: 20 passed on an in-memory SQLite database" width="900"><br><sub>pytest -v: 20 passed on an in-memory SQLite database</sub></p>
 
 ---
 
@@ -227,10 +245,9 @@ produced it, and rollbacks are a one-line change in `values.yaml`.
 Job 4 is the GitOps hand-off: the pipeline never runs `kubectl`; it changes the desired state in Git and
 ArgoCD reconciles the cluster.
 
-![Green GitHub Actions run: test, build, Trivy scan, GHCR push, GitOps bump](docs/screenshots/09-actions-green.png)
+<p align="center"><img src="docs/screenshots/09-actions-green.png" alt="Green GitHub Actions run: test, build, Trivy scan, GHCR push, GitOps bump" width="900"><br><sub>Green GitHub Actions run: test, build, Trivy scan, GHCR push, GitOps bump</sub></p>
 
-![GHCR package page: public images tagged only with commit SHAs](docs/screenshots/10-ghcr-packages-sha.png)
-
+<p align="center"><img src="docs/screenshots/10-ghcr-packages-sha.png" alt="GHCR package page: public images tagged only with commit SHAs" width="900"><br><sub>GHCR package page: public images tagged only with commit SHAs</sub></p>
 
 ---
 
@@ -263,8 +280,7 @@ capabilities and disallow privilege escalation, `.gitignore` blocks `.env`, `*.t
 `terraform.tfvars`, and the workflow uses a least-privilege `GITHUB_TOKEN` (`packages: write` only in
 the job that pushes).
 
-![Trivy output from the pipeline: both images clean, 0 HIGH / 0 CRITICAL](docs/screenshots/11b-trivy-ci.png)
-
+<p align="center"><img src="docs/screenshots/11b-trivy-ci.png" alt="Trivy output from the pipeline: both images clean, 0 HIGH / 0 CRITICAL" width="900"><br><sub>Trivy output from the pipeline: both images clean, 0 HIGH / 0 CRITICAL</sub></p>
 
 ---
 
@@ -302,16 +318,15 @@ terraform destroy -auto-approve
 No credentials are stored in the repository: Terraform reads them from the AWS CLI profile.
 `terraform.tfvars.example` documents every variable.
 
-![terraform plan: 53 resources to add](docs/screenshots/12-terraform-plan.png)
+<p align="center"><img src="docs/screenshots/12-terraform-plan.png" alt="terraform plan: 53 resources to add" width="900"><br><sub>terraform plan: 53 resources to add</sub></p>
 
-![AWS console: stockpilot-vpc in ap-southeast-2](docs/screenshots/13-aws-vpc.png)
+<p align="center"><img src="docs/screenshots/13-aws-vpc.png" alt="AWS console: stockpilot-vpc in ap-southeast-2" width="900"><br><sub>AWS console: stockpilot-vpc in ap-southeast-2</sub></p>
 
-![AWS console: four stockpilot subnets across two availability zones](docs/screenshots/13b-aws-subnets.png)
+<p align="center"><img src="docs/screenshots/13b-aws-subnets.png" alt="AWS console: four stockpilot subnets across two availability zones" width="900"><br><sub>AWS console: four stockpilot subnets across two availability zones</sub></p>
 
-![EKS cluster, managed node group and EC2 nodes from the AWS CLI](docs/screenshots/14-aws-eks-cli.png)
+<p align="center"><img src="docs/screenshots/14-aws-eks-cli.png" alt="EKS cluster, managed node group and EC2 nodes from the AWS CLI" width="900"><br><sub>EKS cluster, managed node group and EC2 nodes from the AWS CLI</sub></p>
 
-![terraform destroy: 53 resources removed, AWS checked empty](docs/screenshots/15-terraform-destroy.png)
-
+<p align="center"><img src="docs/screenshots/15-terraform-destroy.png" alt="terraform destroy: 53 resources removed, AWS checked empty" width="900"><br><sub>terraform destroy: 53 resources removed, AWS checked empty</sub></p>
 
 ---
 
@@ -353,13 +368,13 @@ self-heal. When CI commits a new image SHA, ArgoCD detects the drift and rolls t
 
 ---
 
-![kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running](docs/screenshots/16-kubectl-get-pods-eks.png)
+<p align="center"><img src="docs/screenshots/16-kubectl-get-pods-eks.png" alt="kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running" width="900"><br><sub>kubectl get pods on EKS: 2 backend, 2 frontend, 1 postgres, all Running</sub></p>
 
-![ClusterIP services and the Ingress routing / and /api](docs/screenshots/17-kubectl-get-svc-ingress-eks.png)
+<p align="center"><img src="docs/screenshots/17-kubectl-get-svc-ingress-eks.png" alt="ClusterIP services and the Ingress routing / and /api" width="900"><br><sub>ClusterIP services and the Ingress routing / and /api</sub></p>
 
-![helm list: the stockpilot release deployed](docs/screenshots/18-helm-list-eks.png)
+<p align="center"><img src="docs/screenshots/18-helm-list-eks.png" alt="helm list: the stockpilot release deployed" width="900"><br><sub>helm list: the stockpilot release deployed</sub></p>
 
-![argocd app get: Synced / Healthy with automated sync, prune and self-heal](docs/screenshots/23-argocd-synced-eks.png)
+<p align="center"><img src="docs/screenshots/23-argocd-synced-eks.png" alt="argocd app get: Synced / Healthy with automated sync, prune and self-heal" width="900"><br><sub>argocd app get: Synced / Healthy with automated sync, prune and self-heal</sub></p>
 
 ---
 
@@ -383,10 +398,9 @@ kubectl port-forward svc/kube-prometheus-stack-grafana   -n monitoring 3001:80  
 ./scripts/load-test.sh http://<ingress-host> 600                                     # populate the panels
 ```
 
-![Prometheus targets: both backend pods UP](docs/screenshots/21-prometheus-targets-up-eks.png)
+<p align="center"><img src="docs/screenshots/21-prometheus-targets-up-eks.png" alt="Prometheus targets: both backend pods UP" width="900"><br><sub>Prometheus targets: both backend pods UP</sub></p>
 
-![Grafana: StockPilot application metrics with live traffic](docs/screenshots/22-grafana-dashboard-eks.png)
-
+<p align="center"><img src="docs/screenshots/22-grafana-dashboard-eks.png" alt="Grafana: StockPilot application metrics with live traffic" width="900"><br><sub>Grafana: StockPilot application metrics with live traffic</sub></p>
 
 ---
 
